@@ -1,0 +1,12 @@
+--|| --------------------------------------------
+--|| Enter to docker container as airflow user
+--|| --------------------------------------------
+
+-- List docker containers
+docker ps 
+
+-- Enter to docker container
+docker exec -ti docker-image_airflow-scheduler_1 /bin/bash
+
+-- Test dag
+airflow task test [python-file-name] [task-id] [date]
