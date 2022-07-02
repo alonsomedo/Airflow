@@ -15,3 +15,6 @@ airflow task test [python-file-name] [task-id] [date]
 docker exec -ti docker-image_airflow-worker_1 /bin/bash
 ls /tmp/
 
+-- Enter to pogres database
+docker exec -ti docker-image_postgres_1 /bin/bash
+psql -Uairflow
