@@ -8,5 +8,10 @@ docker ps
 -- Enter to docker container
 docker exec -ti docker-image_airflow-scheduler_1 /bin/bash
 
--- Test dag
+-- Test dag in scheduler 
 airflow task test [python-file-name] [task-id] [date]
+
+-- Check for file in worker
+docker exec -ti docker-image_airflow-worker_1 /bin/bash
+ls /tmp/
+
