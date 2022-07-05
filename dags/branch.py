@@ -73,6 +73,11 @@ with DAG('branch', schedule_interval='@daily', default_args=default_args, catchu
         task_id='test'
     )
 
+    storing = DummyOperator(
+        task_id='storing'
+    )
+
+
 
     downloading_data >> processing_tasks >> choose_model
-    choose_model >> [accurate, inaccurate, test]
+    choose_model >> [accurate, inaccurate, test] >> storing
