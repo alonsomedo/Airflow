@@ -74,7 +74,8 @@ with DAG('branch', schedule_interval='@daily', default_args=default_args, catchu
     )
 
     storing = DummyOperator(
-        task_id='storing'
+        task_id='storing',
+        trigger_rule='none_failed_or_skipped'
     )
 
 
