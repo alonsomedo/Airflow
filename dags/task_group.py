@@ -18,16 +18,23 @@ with DAG('taskgroup_dag', default_args=default_args, schedule_interval='@daily',
     )
 
     with TaskGroup('processing_tasks') as processing_tasks:
-         
         task_2 = BashOperator(
-            task_id='task_2',
-            bash_command='sleep 3'
-        )
+                task_id='task_2',
+                bash_command='sleep 3'
+            )
 
-        task_3 = BashOperator(
-            task_id='task_3',
-            bash_command='sleep 3'
-        )
+        # By default the taskgroup id is the prefix of the task.
+        with TaskGroup('spark_tasks') as spark_tasks:
+            task_2 = BashOperator(
+                task_id='task_3', # spark_tasks.task_3
+                bash_command='sleep 3'
+            )
+
+        with TaskGroup('flink_tasks') as spark_tasks:
+            task_3 = BashOperator(
+                task_id='task_3', #flink_tasks.task_3
+                bash_command='sleep 3'
+            )
 
 
     task_4 = BashOperator(
