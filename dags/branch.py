@@ -26,7 +26,7 @@ def _choose_best_model(ti):
     ])
     best_accuracy = max(accuracies)
     if best_accuracy > 5:
-        return 'accurate'
+        return ['accurate', 'test']
     
     return 'inaccurate'
 
