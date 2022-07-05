@@ -75,4 +75,4 @@ with DAG('branch', schedule_interval='@daily', default_args=default_args, catchu
 
 
     downloading_data >> processing_tasks >> choose_model
-    choose_model >> [accurate, inaccurate]
+    choose_model >> [accurate, inaccurate, test]
