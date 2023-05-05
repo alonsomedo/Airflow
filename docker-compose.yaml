@@ -307,6 +307,38 @@ services:
       - mysql-db-volume:/var/lib/mysql
     ports:
       - 3306:3306
+
+  ###########################################################
+  ## MINIO
+  ##########################################################
+
+  s3_minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+      - minio_storage:/data
+    environment:
+      MINIO_ACCESS_KEY: minio_admin
+      MINIO_SECRET_KEY: minio_password
+    command: server /data --console-address ":9090" 
+    restart: always
+
+  s3_minio_buckets:
+    image: minio/mc
+    depends_on:
+        - s3_minio
+    entrypoint: >
+        /bin/sh -c "
+        /usr/bin/mc config host add s3_minio http://host.docker.internal:9000 minio_admin minio_password;
+        /usr/bin/mc rm -r --force s3_minio/raw;
+        /usr/bin/mc mb s3_minio/raw;
+        exit 0;
+        "
+
+  
 volumes:
+  minio_storage:
   postgres-db-volume:
   mysql-db-volume:
