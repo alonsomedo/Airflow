@@ -1,0 +1,12 @@
+# API params
+param_name:
+  - value_1
+  - value_2
+  - value_3
+
+endpoint: https://{url}/{version}/{}/
+
+# Lifecycle parameters
+date_sufix_gcs: "{{ (dag_run.logical_date).strftime('%Y/%m/%d/') }}"
+age: 180
+gcs_prefix: thirdparty/{vendor}/.../
