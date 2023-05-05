@@ -11,10 +11,8 @@ from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from import_trx.util.upload_trx_files_to_s3 import upload_trx_files_to_s3
+from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.operators.bash import BashOperator
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
-
 
 # Declare configuration variables
 dag_file_name = os.path.basename(__file__).split('.')[0]
@@ -51,20 +49,11 @@ with DAG(dag_file_name,
     # Declare Dummy Operators
     start_operator = DummyOperator(task_id='start-operator')
     end_operator = DummyOperator(task_id='end-operator')
-
-    sleep = BashOperator(
-        task_id='sleep',
+    
+    process = BashOperator(
+        task_id='process',
         bash_command='sleep 15'
     )
+
     
-    upload_trx_files_to_s3 = PythonOperator(
-        task_id='upload_trx_files_to_s3',
-        python_callable=upload_trx_files_to_s3
-    )
-    
-    tigger_csv_to_mysql = TriggerDagRunOperator(
-        task_id='trigger_dag_import_csv_to_mysql_trigger',
-        trigger_dag_id='import_csv_to_mysql_trigger'
-    )
-     
-    start_operator >> sleep >> upload_trx_files_to_s3 >> tigger_csv_to_mysql >> end_operator
+    start_operator >> process >> end_operator

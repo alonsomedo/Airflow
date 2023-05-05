@@ -1,7 +1,7 @@
 schedule: 
   prod: null
   staging: null
-  dev: '@daily'
+  dev: null
   
 #timeout parameters
 dag_run_timeout: 12 #hours
@@ -26,7 +26,7 @@ dag_args:
     catchup: False
     max_active_tasks: 1    
   dev:
-    start_date: '2023-04-04'
+    start_date: null
     max_active_runs: 1
     catchup: False
     max_active_tasks: 1
