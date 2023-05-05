@@ -53,7 +53,8 @@ with DAG(dag_file_name,
     
     soccer_players_table = MySqlOperator(
         task_id='create_soccer_players_table',
-        sql=get_sql(dag_file_name, "create_soccer_players_table.sql").format(table_name='soccer_players')
+        sql=get_sql(dag_file_name, "create_soccer_players_table.sql"),
+        params={"table_name": "soccer_players"}
     )
     
     get_soccer_players = PythonOperator(
@@ -73,11 +74,18 @@ with DAG(dag_file_name,
     for position in pipeline_config['soccer_positions']:
         create_soccer_position_table = MySqlOperator(
             task_id=f'create_soccer_{position}_table',
-            sql=get_sql(dag_file_name, "create_soccer_players_table.sql").format(table_name=f'soccer_players_{position}')
+            sql=get_sql(dag_file_name, "create_soccer_players_table.sql"),
+            params={"table_name": f"soccer_players_{position}"}
         )
         
+        insert_players_by_position = MySqlOperator(
+            task_id=f'insert_players_by_position_{position}',
+            sql=get_sql(dag_file_name, "insert_players_by_position.sql"),
+            params={"table_name": f"soccer_players_{position}",
+                    "position": position}
+        )
         
         #position_list.append(print_message)
-        start_operator >> soccer_players_table >> get_soccer_players >> load_soccer_players >> create_soccer_position_table >> end_operator
+        start_operator >> soccer_players_table >> get_soccer_players >> load_soccer_players >> create_soccer_position_table >> insert_players_by_position >> end_operator
     
     #start_operator >> soccer_players_table >> get_soccer_players >> load_soccer_players >> position_list >> end_operator

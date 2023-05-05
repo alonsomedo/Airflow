@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS {table_name} 
+CREATE TABLE IF NOT EXISTS {{ params.table_name }} 
 (
     player_id int,
     name varchar(100),
